@@ -1,7 +1,10 @@
 package com.github.gyunstorys.treeofsavior.mapper;
 
 import com.github.gyunstorys.treeofsavior.mapper.api.vo.UserConfig;
+import net.sourceforge.tess4j.ITessAPI;
+import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.Tesseract1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
