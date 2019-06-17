@@ -114,7 +114,7 @@ public class ApiService {
         Color black = new Color(255,255,255);
         for (int w =0; w< width ; w++){
             for (int h =0; h< height; h++){
-                if (new Color(bufferedImage.getRGB(w,h)).getGreen() >= 150 && new Color(bufferedImage.getRGB(w,h)).getRed() >= 150  && new Color(bufferedImage.getRGB(w,h)).getBlue() >= 150){
+                if (new Color(bufferedImage.getRGB(w,h)).getGreen() >= 200 && new Color(bufferedImage.getRGB(w,h)).getRed() >= 200  && new Color(bufferedImage.getRGB(w,h)).getBlue() >= 200){
                     bufferedImage.setRGB(w,h,black.getRGB());
                 }else{
                     bufferedImage.setRGB(w,h,white.getRGB());

@@ -2,9 +2,7 @@ package com.github.gyunstorys.treeofsavior.mapper;
 
 import com.github.gyunstorys.treeofsavior.mapper.api.vo.UserConfig;
 import net.sourceforge.tess4j.ITessAPI;
-import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
-import net.sourceforge.tess4j.Tesseract1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,6 +18,7 @@ public class TosMapperApplication {
     @Bean
     public Tesseract getTesseract(@Autowired UserConfig userConfig){
         Tesseract tesseract = new Tesseract();
+        tesseract.setOcrEngineMode(ITessAPI.TessOcrEngineMode.OEM_LSTM_ONLY);
         tesseract.setLanguage("kor");
         System.out.println("tess data path : " + userConfig.getTessdata());
         tesseract.setDatapath(userConfig.getTessdata());
