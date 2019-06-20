@@ -6,13 +6,16 @@ import net.sourceforge.tess4j.Tesseract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.ApplicationPidFileWriter;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class TosMapperApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TosMapperApplication.class, args);
+        SpringApplication application = new SpringApplication(TosMapperApplication.class);
+        application.addListeners(new ApplicationPidFileWriter());
+        application.run(args);
     }
 
     @Bean
