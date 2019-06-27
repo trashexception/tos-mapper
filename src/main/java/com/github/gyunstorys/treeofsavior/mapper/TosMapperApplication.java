@@ -22,7 +22,7 @@ public class TosMapperApplication {
     @Bean
     public Tesseract getTesseract(@Autowired UserConfig userConfig){
         Tesseract tesseract = new Tesseract();
-        tesseract.setOcrEngineMode(ITessAPI.TessOcrEngineMode.OEM_LSTM_ONLY);
+        tesseract.setOcrEngineMode(ITessAPI.TessOcrEngineMode.OEM_DEFAULT);
         tesseract.setLanguage("kor");
         System.out.println("tess data path : " + userConfig.getTessdata());
         tesseract.setDatapath(userConfig.getTessdata());
