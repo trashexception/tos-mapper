@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 public class TosMapperApplication {
 
     public static void main(String[] args) {
+//        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         SpringApplication application = new SpringApplication(TosMapperApplication.class);
         application.addListeners(new ApplicationPidFileWriter());
         application.run(args);

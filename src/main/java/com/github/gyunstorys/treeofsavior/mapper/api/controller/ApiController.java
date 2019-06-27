@@ -34,7 +34,11 @@ public class ApiController implements ApplicationContextAware {
     public ResponseVo getCurrentMapInformation() throws TesseractException, IOException {
         return service.getMapInformation(userConfig.getX(),userConfig.getY(),userConfig.getWidth(),userConfig.getHeight());
     }
+    @RequestMapping(value="/test")
+    public void test(){
+        service.getTextPosition();
 
+    }
     @RequestMapping(value = "/shutdown")
     public void shutdownContext() {
         ((ConfigurableApplicationContext) context).close();

@@ -5,22 +5,20 @@ import com.github.gyunstorys.treeofsavior.mapper.api.vo.ResponseVo;
 import com.github.gyunstorys.treeofsavior.mapper.api.vo.UserConfig;
 import com.github.gyunstorys.treeofsavior.mapper.utils.EditDistance;
 import com.github.gyunstorys.treeofsavior.mapper.utils.JasoTokenizer;
+import com.github.gyunstorys.treeofsavior.mapper.utils.OtsuThresholder;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.javatuples.Pair;
-import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageTypeSpecifier;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -63,11 +61,14 @@ public class ApiService {
      * @param height the height
      * @return the map information
      * @throws TesseractException the tesseract exception
+     * @throws IOException        the io exception
      */
     public synchronized ResponseVo getMapInformation(int x, int y, int width, int height)
             throws TesseractException, IOException {
-        BufferedImage bufferedImage = getImage(x, y, width, height);
+//        BufferedImage bufferedImage = getImage(x, y, width, height);
+        BufferedImage bufferedImage = getGrayScaleImage(x, y, width, height);
         String text = tesseract.doOCR(bufferedImage);
+        System.out.println(text);
         if (text.equals("")) {
             ResponseVo responseVo = new ResponseVo();
             responseVo.setCode(1);
@@ -92,6 +93,21 @@ public class ApiService {
         ImageIO.write(bufferedImage, "jpg", byteArrayOutputStream);
         return "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
     }
+    /**
+     * Get image buffered image.
+     *
+     * @param x      the x
+     * @param y      the y
+     * @param width  the width
+     * @param height the height
+     * @return the buffered image
+     */
+    public BufferedImage getGrayScaleImage(int x, int y, int width, int height) throws IOException {
+        BufferedImage newImage = robot.createScreenCapture(new Rectangle(x, y, width, height));
+        newImage = OtsuThresholder.toGray(newImage);
+        return OtsuThresholder.binarize(newImage);
+    }
+
 
     /**
      * Get image buffered image.
@@ -135,12 +151,44 @@ public class ApiService {
         Color black = new Color(255,255,255);
         for (int w =0; w< width ; w++){
             for (int h =0; h< height; h++){
-                if (new Color(bufferedImage.getRGB(w,h)).getGreen() >= 130 && new Color(bufferedImage.getRGB(w,h)).getRed() >= 130  && new Color(bufferedImage.getRGB(w,h)).getBlue() >= 130){
+                if (new Color(bufferedImage.getRGB(w,h)).getGreen() >= 110 && new Color(bufferedImage.getRGB(w,h)).getRed() >= 110  && new Color(bufferedImage.getRGB(w,h)).getBlue() >= 110){
                     bufferedImage.setRGB(w,h,black.getRGB());
                 }else{
                     bufferedImage.setRGB(w,h,white.getRGB());
                 }
             }
         }
+    }
+
+    /**
+     * Gets text position.
+     */
+    public void getTextPosition() {
+//        BufferedImage bufferedImage = getImage(0,0,2560,1080);
+//        byte[] pixels = ((DataBufferByte) bufferedImage.getRaster().getDataBuffer()).getData();
+//        Mat mat =new Mat();
+//        mat.put(0,0,pixels);
+//        MatOfKeyPoint kpoint = new MatOfKeyPoint();
+//        FeatureDetector detector = FeatureDetector.create(FeatureDetector.MSER);
+//        detector.detect(mat,kpoint);
+//        for (KeyPoint keyPoint:kpoint.toList()){
+//            int rectanx1 = (int) (kpoint.pt.x - 0.5 * kpoint.size);
+//            int rectany1 = (int) (kpoint.pt.y - 0.5 * kpoint.size);
+//            // rectanx2 = (int) (kpoint.pt.x + 0.5 * kpoint.size);
+//            // rectany2 = (int) (kpoint.pt.y + 0.5 * kpoint.size);
+//            int rectanx2 = (int) (kpoint.size().width);
+//            int rectany2 = (int) (kpoint.size());
+//            if (rectanx1 <= 0)
+//                rectanx1 = 1;
+//            if (rectany1 <= 0)
+//                rectany1 = 1;
+//            if ((rectanx1 + rectanx2) > mGray.width())
+//                rectanx2 = mGray.width() - rectanx1;
+//            if ((rectany1 + rectany2) > mGray.height())
+//                rectany2 = mGray.height() - rectany1;
+//            Rect rectant = new Rect(rectanx1, rectany1, rectanx2, rectany2);
+//            Mat roi = new Mat(mask, rectant);
+//            roi.setTo(CONTOUR_COLOR);
+//        }
     }
 }
