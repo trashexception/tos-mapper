@@ -6,6 +6,7 @@ import com.github.gyunstorys.treeofsavior.mapper.api.vo.UserConfig;
 import com.github.gyunstorys.treeofsavior.mapper.utils.EditDistance;
 import com.github.gyunstorys.treeofsavior.mapper.utils.JasoTokenizer;
 import com.github.gyunstorys.treeofsavior.mapper.utils.OtsuThresholder;
+import com.sun.jna.platform.WindowUtils;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.apache.commons.io.IOUtils;
@@ -18,8 +19,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Base64;
+import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -87,7 +87,24 @@ public class ApiService {
                                 e.getValue0().getValue0().getValue1(), e.getValue1()))
                         .filter(e -> e != null).collect(Collectors.toList()));
     }
-
+    public Map<String, Double> getWindowPosition(){
+        Map<String,Double> result = new HashMap<>();
+        List<Rectangle> results = WindowUtils.getAllWindows(true).stream()
+                .filter(e->e.getTitle().contains("Tree Of Savior"))
+                .map(e->e.getLocAndSize())
+                .collect(Collectors.toList());
+        if (results.size()==0){
+            return null;
+        }
+        else {
+            Rectangle rectangle = results.get(0);
+            result.put("x",rectangle.getX());
+            result.put("y",rectangle.getY());
+            result.put("width",rectangle.getWidth());
+            result.put("height",rectangle.getHeight());
+            return result;
+        }
+    }
     private String convertBufferedImageToJpgString(BufferedImage bufferedImage) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         ImageIO.write(bufferedImage, "jpg", byteArrayOutputStream);

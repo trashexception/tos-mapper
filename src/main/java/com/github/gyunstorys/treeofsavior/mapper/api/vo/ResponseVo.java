@@ -4,12 +4,34 @@ import java.util.List;
 
 /**
  * The type Response vo.
+ *
+ * @param <T> the type parameter
  */
-public class ResponseVo {
+public class ResponseVo <T> {
     private int code=0;
     private String message;
     private String image;
+    private T data;
     private List<MapInformationVo> informations;
+
+
+    /**
+     * Gets data.
+     *
+     * @return the data
+     */
+    public T getData() {
+        return data;
+    }
+
+    /**
+     * Sets data.
+     *
+     * @param data the data
+     */
+    public void setData(T data) {
+        this.data = data;
+    }
 
     /**
      * Gets code.
