@@ -65,7 +65,6 @@ public class ApiService {
      */
     public synchronized ResponseVo getMapInformation(int x, int y, int width, int height)
             throws TesseractException, IOException {
-//        BufferedImage bufferedImage = getImage(x, y, width, height);
         BufferedImage bufferedImage = getGrayScaleImage(x, y, width, height);
         String text = tesseract.doOCR(bufferedImage);
         System.out.println(text);
@@ -87,6 +86,12 @@ public class ApiService {
                                 e.getValue0().getValue0().getValue1(), e.getValue1()))
                         .filter(e -> e != null).collect(Collectors.toList()));
     }
+
+    /**
+     * Get window position map.
+     *
+     * @return the map
+     */
     public Map<String, Double> getWindowPosition(){
         Map<String,Double> result = new HashMap<>();
         List<Rectangle> results = WindowUtils.getAllWindows(true).stream()
@@ -110,6 +115,7 @@ public class ApiService {
         ImageIO.write(bufferedImage, "jpg", byteArrayOutputStream);
         return "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
     }
+
     /**
      * Get image buffered image.
      *
@@ -118,6 +124,7 @@ public class ApiService {
      * @param width  the width
      * @param height the height
      * @return the buffered image
+     * @throws IOException the io exception
      */
     public BufferedImage getGrayScaleImage(int x, int y, int width, int height) throws IOException {
         BufferedImage newImage = robot.createScreenCapture(new Rectangle(x, y, width, height));

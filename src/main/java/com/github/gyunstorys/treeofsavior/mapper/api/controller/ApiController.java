@@ -33,6 +33,10 @@ public class ApiController implements ApplicationContextAware {
     public ResponseVo getCurrentMapInformation() throws TesseractException, IOException {
         return service.getMapInformation(userConfig.getX(),userConfig.getY(),userConfig.getWidth(),userConfig.getHeight());
     }
+    @RequestMapping(value = "/map/information")
+    public ResponseVo getCurrentMapInformationForPosition(UserConfig userConfig) throws TesseractException, IOException {
+        return service.getMapInformation(userConfig.getX(),userConfig.getY(),userConfig.getWidth(),userConfig.getHeight());
+    }
     @RequestMapping(value="/application/position")
     public ResponseVo getApplicationWindowPosition(){
         ResponseVo responseVo = new ResponseVo();
